@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
+from app.api.v1.routers import api_router
 from fastapi import FastAPI
 
-def start():
+async def start():
     print("service is started.")
     
 def shutdown():
@@ -10,7 +11,7 @@ def shutdown():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # 시작점
-    start()
+    await start()
     
     yield
     
@@ -22,3 +23,6 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+# v1 API 라우터
+app.include_router(api_router, prefix="/api/v1")
